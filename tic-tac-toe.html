@@ -78,7 +78,7 @@
             <tr>
                 <td class="verb-button" id="verb11">Go</td>
                 <td class="verb-button" id="verb12">See</td>
-                <td class="verb-button" id="verb13" >Get</td>
+                <td class="verb-button" id="verb13">Get</td>
             </tr>
             <tr>
                 <td class="verb-button" id="verb21">Write</td>
@@ -87,8 +87,8 @@
             </tr>
             <tr>
                 <td class="verb-button" id="verb31">Run</td>
-                <td class="verb-button" id="verb32">broke</td>
-                <td class="verb-button" id="verb33">eat</td>
+                <td class="verb-button" id="verb32">Break</td>
+                <td class="verb-button" id="verb33">Eat</td>
             </tr>
         </table>
     </div>
@@ -103,13 +103,13 @@
     let turn = 0;
 	
 	let verbs = { 'Go' : 'Went', 
-				  'See': 'Seen',
+				  'See': 'Saw',
 				  'Get': 'Got',
 				  'Write': 'Wrote',
 				  'Tell': 'Told',
 				  'Speak': 'Spoke',
 				  'Run': 'Ran',
-				  'Broke': 'Broke',
+				  'Break': 'Broke',
 				  'Eat': 'Ate'
 				};
 
@@ -118,6 +118,7 @@
 		let answer = prompt('What is the past form for "' + verb + '" ?' );
 		
 		if (verbs[verb].toLowerCase() == answer.toLowerCase()) {
+			markTheBoard(evt.target);
 			//todo : add a score
 		} else {
 			//todo: add a score
@@ -198,12 +199,19 @@
         document.getElementById('player-name').innerHTML = players[turn];
         startWatch();
     }
+	
+	function markTheBoard(element) {
+		element.innerHTML = turn == 1 ? "X" : "O";
+	}
 
     startGame();
 	
-	const button11 =  document.getElementById('verb11');
-	button11.addEventListener("click", answer);
-	button11.myParam = button11.innerText;
+
+	['verb11', 'verb12', 'verb13', 'verb21', 'verb22', 'verb23', 'verb31', 'verb32', 'verb33'].forEach((verb) => {
+		const button =  document.getElementById(verb);
+		button.addEventListener("click", answer);
+		button.myParam = button.innerText;
+	});
 	
 </script>
 
