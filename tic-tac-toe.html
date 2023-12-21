@@ -1,0 +1,218 @@
+<html>
+<header>
+    <title>Tic Tac Toe</title>
+</header>
+<style>
+    #game {
+        display: flex;
+        position: relative;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .game-header {
+        margin-top: 30px;
+        margin: auto;
+        width: 700px;
+        height: 60px;
+        margin-bottom: 10px;
+        display: flex;
+    }
+
+    table,
+    td,
+    th {
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 700px;
+        height: 700px;
+        margin: auto;
+    }
+
+    .verb-button {
+        cursor: pointer;
+        transition-duration: 0.4s;
+    }
+
+    .verb-button:hover {
+        background-color: rgb(240, 238, 238);
+    }
+
+    .counter {
+        margin-left: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    .turn-player-label {
+        font-size: 30px;
+        font-weight: bold;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    .clock-digit {
+        font-size: 30px;
+        font-weight: bold;
+    }
+</style>
+
+
+<body>
+    <div class="game-header">
+        <p class="turn-player-label" id="player-name">Player 1</p>
+        <div class="counter">
+            <div id="time">
+                <span class="clock-digit" id="min">00</span>
+                <span class="clock-digit">:</span>
+                <span class="clock-digit" id="sec">30</span>
+            </div>
+        </div>
+    </div>
+    <div id="game">
+        <table>
+            <tr>
+                <td class="verb-button" id="verb11">Go</td>
+                <td class="verb-button" id="verb12">See</td>
+                <td class="verb-button" id="verb13">Get</td>
+            </tr>
+            <tr>
+                <td class="verb-button" id="verb21">Write</td>
+                <td class="verb-button" id="verb22">Tell</td>
+                <td class="verb-button" id="verb23">Speak</td>
+            </tr>
+            <tr>
+                <td class="verb-button" id="verb31">Run</td>
+                <td class="verb-button" id="verb32">Break</td>
+                <td class="verb-button" id="verb33">Eat</td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+<script>
+    let minute = 0;
+    let second = 30;
+    let count = 0;
+
+    let players = ['Davi', 'Mario'];
+    let turn = 0;
+	
+	let verbs = { 'Go' : 'Went', 
+				  'See': 'Saw',
+				  'Get': 'Got',
+				  'Write': 'Wrote',
+				  'Tell': 'Told',
+				  'Speak': 'Spoke',
+				  'Run': 'Ran',
+				  'Break': 'Broke',
+				  'Eat': 'Ate'
+				};
+
+	function answer(evt) {
+		const verb = evt.currentTarget.myParam;
+		let answer = prompt('What is the past form for "' + verb + '" ?' );
+		
+		if (verbs[verb].toLowerCase() == answer.toLowerCase()) {
+			markTheBoard(evt.target);
+			//todo : add a score
+		} else {
+			//todo: add a score
+		}
+		
+		timer = false;
+		changeTurn();
+		resetWatch();
+		startWatch();
+    }
+
+
+    function changeTurn() {
+        turn = turn === 0 ? 1 : 0;
+        document.getElementById('player-name').innerHTML = players[turn];
+    }
+
+    function runWatch() {
+        if (timer) {
+            count--;
+
+            if (count < 0) {
+                second--;
+                count = 100;
+            }
+
+            if (second == 60) {
+                minute++;
+                second = 0;
+            }
+
+            let minString = minute;
+            let secString = second;
+            let countString = count;
+
+            if (minute < 10) {
+                minString = "0" + minString;
+            }
+
+            if (second < 10) {
+                secString = "0" + secString;
+            }
+
+            if (count < 10) {
+                countString = "0" + countString;
+            }
+
+            document.getElementById('min').innerHTML = minString;
+            document.getElementById('sec').innerHTML = secString;
+			
+			if (second <= 0) {
+                timer = false;
+                changeTurn();
+                resetWatch();
+                startWatch();
+                return;
+            }
+			
+            setTimeout(runWatch, 10);
+        }
+    }
+
+    function startWatch() {
+        timer = true;
+        runWatch();
+    }
+
+    function resetWatch() {
+        timer = false;
+        minute = 0;
+        second = 30;
+        count = 0;
+        document.getElementById('min').innerHTML = "00";
+        document.getElementById('sec').innerHTML = "00";
+    }
+
+    function startGame() {
+        document.getElementById('player-name').innerHTML = players[turn];
+        startWatch();
+    }
+	
+	function markTheBoard(element) {
+		element.innerHTML = turn == 1 ? "X" : "O";
+	}
+
+    startGame();
+	
+
+	['verb11', 'verb12', 'verb13', 'verb21', 'verb22', 'verb23', 'verb31', 'verb32', 'verb33'].forEach((verb) => {
+		const button =  document.getElementById(verb);
+		button.addEventListener("click", answer);
+		button.myParam = button.innerText;
+	});
+	
+</script>
+
+</html>
